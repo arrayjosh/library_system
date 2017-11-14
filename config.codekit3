@@ -19,16 +19,6 @@
 		"oF": 0,
 		"oS": 3
 		},
-	"\/css\/min\/main-min.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/css\/min\/min\/main-min-min.css",
-		"oF": 0,
-		"oS": 3
-		},
 	"\/index.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -40,6 +30,15 @@
 		"mi": 0,
 		"oA": 0,
 		"oAP": "\/scripts\/min\/main-min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/scripts\/min\/main-min.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 0,
+		"oAP": "\/scripts\/min\/min\/main-min-min.js",
 		"oF": 0,
 		"sC": 0,
 		"tS": 0
@@ -79,6 +78,19 @@
 		"oF": 0,
 		"sC": 0,
 		"tS": 0
+		},
+	"\/scss\/main.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/css\/main.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
 		}
 	},
 "hooks": [
@@ -1955,10 +1967,10 @@
 	"languageDefaultsSASS": {
 		"autoOutputAction": 0,
 		"autoOutputPathFilenamePattern": "*.css",
-		"autoOutputPathRelativePath": "..\/css",
+		"autoOutputPathRelativePath": "\/css",
 		"autoOutputPathReplace1": "sass",
 		"autoOutputPathReplace2": "css",
-		"autoOutputPathStyle": 0,
+		"autoOutputPathStyle": 1,
 		"createSourceMap": 0,
 		"debugStyle": 0,
 		"decimalPrecision": 10,
