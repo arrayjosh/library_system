@@ -1,3 +1,5 @@
+/* global Requests */
+
 var bookTemplate = $('#templates .book')
 var borrowerTemplate = $('#templates .borrower')
 var bookTable = $('#bookTable')
@@ -6,8 +8,15 @@ var borrowerTable = $('#borrowerTable')
 // MY LIBRARY ID IS 128
 
 var libraryID = 128
+var requests = new Requests(libraryID)
+// var baseURL = `https://floating-woodland-64068.herokuapp.com/libraries/${libraryID}`
 
-var baseURL = `https://floating-woodland-64068.herokuapp.com/libraries/${libraryID}`
+var dataModel = {
+  //books: [],
+  //borrowers: [],
+}
+
+
 
 // The bookData argument is passed in from the API
 function addBookToPage(bookData) {
@@ -23,8 +32,7 @@ function addBookToPage(bookData) {
 function addBorrowerToPage(borrowerData) {
   var borrower = borrowerTemplate.clone()
   borrower.attr('data-id', borrowerData.id)
-  borrower.find('.borrowerFirstName').text(borrowerData.firstname)
-  borrower.find('.borrowerLastName').text(borrowerData.lastname)
+  borrower.find('.borrowerName').text(`${borrowerData.firstname} ${borrowerData.lastname}`)
   borrowerTable.prepend(borrower)
 }
 
@@ -35,27 +43,29 @@ function addBorrowerToPage(borrowerData) {
   </tr>
 */
 
-var getBooksRequest = $.ajax({
-  type: 'GET',
-  url: `${baseURL}/books`,
+var bookPromise = requests.getBooks().then((dataFromServer) => {
+  dataModel.books = dataFromServer
 })
 
-getBooksRequest.done( (dataFromServer) => {
-  dataFromServer.forEach( (bookData) => {
+var borrowerPromise = requests.getBorrowers().then((dataFromServer) => {
+  dataModel.borrowers = dataFromServer
+})
+
+var promises = [bookPromise, borrowerPromise]
+
+Promise.all(promises).then(() => {
+  // First add Borrowers to the page
+  dataModel.borrowers.forEach( (borrowerData) => {
+    addBorrowerToPage(borrowerData)
+  })
+
+  // Next add Books to the page
+  dataModel.books.forEach( (bookData) => {
     addBookToPage(bookData)
   })
 })
 
-var getBorrowersRequest = $.ajax({
-  type: 'GET',
-  url: `${baseURL}/borrowers`
-})
 
-getBorrowersRequest.done((dataFromServer) => {
-  dataFromServer.forEach( (borrowerData) => {
-    addBorrowerToPage(borrowerData)
-  })
-})
 
 $('#createBookButton').on('click', () => {
   var bookData = {}
@@ -64,15 +74,7 @@ $('#createBookButton').on('click', () => {
   bookData.description = $('.addBookDescription').val()
   bookData.image_url = $('.addBookImageURL').val()
 
-  var createBookRequest = $.ajax({
-    type: 'POST',
-    url: baseURL + '/books',
-    data: {
-      book: bookData
-    }
-  })
-
-  createBookRequest.done((dataFromServer) => {
+  requests.createBook(bookData).then((dataFromServer) => {
     addBookToPage(dataFromServer)
     $('#addBookModal').modal('hide')
     $('#addBookForm')[0].reset()
