@@ -4,6 +4,7 @@ var bookTemplate = $('#templates .book')
 var borrowerTemplate = $('#templates .borrower')
 var bookTable = $('#bookTable')
 var borrowerTable = $('#borrowerTable')
+var borrowerOptionTemplate = $('#templates .borrowerOption')
 
 // MY LIBRARY ID IS 128
 
@@ -16,11 +17,9 @@ var dataModel = {
   //borrowers: [],
 }
 
-
-
 // The bookData argument is passed in from the API
 function addBookToPage(bookData) {
-  var book = bookTemplate.clone()
+  var book = bookTemplate.clone(true, true)
   book.attr('data-id', bookData.id)
   book.find('.bookTitle').text(bookData.title)
   book.find('.bookImage').attr('src', bookData.image_url)
@@ -30,10 +29,19 @@ function addBookToPage(bookData) {
 
 // The borrowerData argument is passed in from the API
 function addBorrowerToPage(borrowerData) {
+  var fullName = `${borrowerData.firstname} ${borrowerData.lastname}`
+
+  // Adds the borrower to the borrowerTable
   var borrower = borrowerTemplate.clone()
   borrower.attr('data-id', borrowerData.id)
-  borrower.find('.borrowerName').text(`${borrowerData.firstname} ${borrowerData.lastname}`)
+  borrower.find('.borrowerName').text(fullName)
   borrowerTable.prepend(borrower)
+
+  // Add borrower to select dropdown
+  var borrowerOption = borrowerOptionTemplate.clone()
+  borrowerOption.text(fullName)
+  borrowerOption.attr('value', borrowerData.id)
+  $('.borrowerSelect').append(borrowerOption)
 }
 
 /*
@@ -79,6 +87,14 @@ $('#createBookButton').on('click', () => {
     $('#addBookModal').modal('hide')
     $('#addBookForm')[0].reset()
   })
+})
+
+
+$('.borrowerSelect').on('change', (event) => {
+  var borrowerID = $(event.target).val()
+  var bookID = $(event.target).parents('.book').attr('data-id')
+  console.log("The id is " + borrowerID)
+  requests.updateBook({borrower_id: borrowerID, id: bookID})
 })
 
 
