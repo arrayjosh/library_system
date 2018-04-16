@@ -10,6 +10,16 @@ $theme-primary: lightgray;
   }
 }
 
+.searchBox {
+  margin-top: 5%;
+}
+
+#borrowerTable {
+  .borrower {
+    cursor: pointer;
+  }
+}
+
 .page-header {
   border-bottom: none;
 }

@@ -1,5 +1,11 @@
 .books .table .book img {
   max-height: 100px; }
 
+.searchBox {
+  margin-top: 5%; }
+
+#borrowerTable .borrower {
+  cursor: pointer; }
+
 .page-header {
   border-bottom: none; }
